@@ -15,7 +15,7 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 data = scaler.fit_transform(data)
 
 
-model = load_model('lstm_model.h5')
+model = load_model('/home/huy/Documents/Desktop/thesis/vn30_prediction/api/lstm_model.h5')
 
 
 @api_view(['GET'])
@@ -30,4 +30,3 @@ def predict_vn30(request):
     
 
     return Response({'vn30_prediction': next_day_prediction[0, 0]})
-

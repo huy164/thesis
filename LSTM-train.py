@@ -6,16 +6,13 @@ from keras.layers import LSTM, Dense
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 
-# Load the data
 url = 'https://raw.githubusercontent.com/huy164/datasets/master/VN30_price.csv'
 df = pd.read_csv(url)
 
-# Preprocess the data
 data = df['VN30'].values.reshape(-1, 1)
 scaler = MinMaxScaler(feature_range=(0, 1))
 data = scaler.fit_transform(data)
 
-# Create the input and output sequences for the LSTM model
 def create_sequences(data, seq_length):
     x = []
     y = []
@@ -34,14 +31,16 @@ y_train, y_test = y[:split_idx], y[split_idx:]
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
-# Train the LSTM model
+
+
 model = Sequential()
 model.add(LSTM(50, return_sequences=True, input_shape=(seq_length, 1)))
 model.add(LSTM(50))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 
-# Use a checkpoint to save the model weights after each epoch
+
+
 checkpoint = ModelCheckpoint('lstm_model.h5', monitor='val_loss', verbose=1,
                              save_best_only=True, mode='min')
 callbacks_list = [checkpoint]
