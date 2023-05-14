@@ -1,7 +1,6 @@
 from django.urls import path
-from myapp.views import predict_vn30
+from myapp.views import get_vn30_history
 
 urlpatterns = [
-    path('predict_vn30/', predict_vn30, name='predict_vn30'),
+    path('get-vn30-history/', get_vn30_history, name='get_vn30_history'),
 ]
-
