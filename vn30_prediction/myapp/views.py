@@ -23,6 +23,17 @@ def get_vn30_history(request):
 
 @require_GET
 def predict_view(request):
+    # predict_range = 30
+    # algorithm = "lstm"
+    n_days_lag = 5 
+    n_features = len(dataset.columns)
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    values = dataset.values
+    values = values.astype('float32')
+    # normalize features
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled = scaler.fit_transform(values)
+    # model = load_model('lstm.h5')
     # Get parameters from the request
     predict_range = int(request.GET.get('predict_range', 30))
     algorithm = request.GET.get('algorithm', 'lstm')
