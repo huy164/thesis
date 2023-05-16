@@ -2,6 +2,8 @@ import csv
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 import numpy as np
+from pandas import read_csv
+from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import load_model
 import os
 
@@ -26,6 +28,7 @@ def predict_view(request):
     # predict_range = 30
     # algorithm = "lstm"
     n_days_lag = 5 
+    dataset = read_csv('https://raw.githubusercontent.com/huy164/datasets/master/VN30_price.csv', header=0, index_col=0)
     n_features = len(dataset.columns)
     scaler = MinMaxScaler(feature_range=(0, 1))
     values = dataset.values
@@ -45,7 +48,6 @@ def predict_view(request):
         # Handle other algorithm cases or raise an error
         return JsonResponse({'error': 'Unsupported algorithm'})
 
-    dataset = read_csv('https://raw.githubusercontent.com/huy164/datasets/master/VN30_price.csv', header=0, index_col=0)
     # get last n_days_lag days of data from dataset
     last_n_days = dataset.values[-n_days_lag:, :]
     # scale data using same scaler fit on training data
