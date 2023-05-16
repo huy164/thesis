@@ -5,6 +5,7 @@ import numpy as np
 from pandas import read_csv
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import load_model
+from datetime import datetime, timedelta
 import os
 
 
@@ -57,23 +58,32 @@ def predict_view(request):
     # generate predictions for next 30 days
     predictions = []
     for i in range(predict_range):
-        # make prediction for next day
+        # Make prediction for the next day
         yhat = model.predict(input_data)
-        # add prediction to list of predictions
+        # Add prediction to the list of predictions
         predictions.append(yhat[0])
-        # update input_data with new prediction
+        # Update input_data with new prediction
         input_data = np.roll(input_data, -1)
         input_data[0, -1, :] = yhat
-    # inverse transform predictions to obtain final predicted values
+
+    # Inverse transform predictions to obtain final predicted values
     predictions = np.array(predictions)
-    # create dummy array with same shape as other features in dataset
     dummy_values = np.zeros((predictions.shape[0], n_features - 1))
-    # concatenate predictions with dummy values
     predictions_with_dummy = np.concatenate((dummy_values, predictions), axis=1)
-    # inverse transform predictions to obtain final predicted values
     inv_yhat = scaler.inverse_transform(predictions_with_dummy)
-    # extract predicted values from last column
     inv_yhat = inv_yhat[:, -1]
 
+    # Define the start date
+    start_date = datetime.now().date()  # Replace with your desired start date
+
+    # Format the response with date and prediction values
+    response = []
+    for i in range(predict_range):
+        prediction = {
+            'Date': (start_date + timedelta(days=i)).strftime('%m/%d/%Y'),
+            'Price': round(inv_yhat[i], 3)
+        }
+        response.append(prediction)
+
     # Return the predictions as a JSON response
-    return JsonResponse({'predictions': inv_yhat.tolist()})
+    return JsonResponse(response, safe=False)
