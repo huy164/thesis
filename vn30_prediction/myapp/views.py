@@ -33,7 +33,7 @@ def predict_view(request):
     inv_yhat = []
     if algorithm == 'lstm':
         inv_yhat = generate_lstm_predictions(dataset,predict_range)
-    if algorithm == 'random_forest':
+    elif algorithm == 'random_forest':
         inv_yhat = generate_random_forest_predictions(dataset,predict_range)
     else:
         # Handle other algorithm cases or raise an error
