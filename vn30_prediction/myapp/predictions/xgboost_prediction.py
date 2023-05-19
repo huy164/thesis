@@ -3,8 +3,6 @@ import numpy as np
 from pandas import DataFrame
 from pandas import concat
 import pickle
-import xgboost
-
 
 
 # convert series to supervised learning
