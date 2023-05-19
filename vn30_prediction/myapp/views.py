@@ -5,8 +5,7 @@ from pandas import read_csv
 from datetime import datetime, timedelta
 from myapp.predictions.lstm_prediction import generate_lstm_predictions
 from myapp.predictions.random_forest_prediction import generate_random_forest_predictions
-
-
+from myapp.predictions.xgboost_prediction import generate_xgboost_predictions
 def get_vn30_history(request):
     data = []
     with open('VN_30_history.csv', 'r',encoding='utf-8-sig') as csvfile:
@@ -35,6 +34,8 @@ def predict_view(request):
         inv_yhat = generate_lstm_predictions(dataset,predict_range)
     elif algorithm == 'random_forest':
         inv_yhat = generate_random_forest_predictions(dataset,predict_range)
+    elif algorithm == 'xgboost':
+        inv_yhat = generate_xgboost_predictions(dataset,predict_range)
     else:
         # Handle other algorithm cases or raise an error
         return JsonResponse({'error': 'Unsupported algorithm'})
