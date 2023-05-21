@@ -6,6 +6,17 @@ from datetime import datetime, timedelta
 from myapp.predictions.lstm_prediction import generate_lstm_predictions
 from myapp.predictions.random_forest_prediction import generate_random_forest_predictions
 from myapp.predictions.xgboost_prediction import generate_xgboost_predictions
+import firebase_admin
+from firebase_admin import credentials, firestore
+import os
+# Initialize Firebase Admin SDK
+# Get the absolute path to the serviceAccountKey.json file
+current_dir = os.path.dirname(os.path.abspath(__file__))
+service_account_path = os.path.join(current_dir, 'firebase-model-key.json')
+cred = credentials.Certificate(service_account_path)  # Update with the path to your service account key file
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 def get_vn30_history(request):
     data = []
     with open('VN_30_history.csv', 'r',encoding='utf-8-sig') as csvfile:
@@ -53,5 +64,19 @@ def predict_view(request):
         }
         response.append(prediction)
 
-    # Return the predictions as a JSON response
+
+    # Create a separate list for modified predictions
+    predictions_to_insert = []
+    for prediction in response:
+        modified_prediction = dict(prediction)  # Create a copy of the prediction dictionary
+        modified_prediction['Algorithm'] = algorithm
+        predictions_to_insert.append(modified_prediction)
+
+    # Insert the modified predictions into Firebase Firestore
+    for prediction in predictions_to_insert:
+        db.collection('prediction').add(prediction)
+
+
+
+
     return JsonResponse(response, safe=False)

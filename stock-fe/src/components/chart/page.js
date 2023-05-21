@@ -3,19 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 export default async function ChartPage() {
-  const [selectedOption, setSelectedOption] = useState('');
-  const [inputValue, setInputValue] =useState('');
-  const [data, setData] =useState([]);
-  useEffect(() => {
-    getData();
-  }, []);
-  const handleOptionChange = (event) => {
-    // setSelectedOption(event.target.value);
-  };
-
-  const handleInputChange = (event) => {
-    // setInputValue(event.target.value);
-  };
+ 
 
   const handleButtonClick = () => {
 

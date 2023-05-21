@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp'
+    'myapp',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -48,8 +49,23 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    'corsheaders.middleware.CorsMiddleware',
 
+]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',  # Add your frontend URL here
+# ]
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 ROOT_URLCONF = 'vn30_prediction.urls'
 
 TEMPLATES = [
@@ -74,14 +90,7 @@ WSGI_APPLICATION = 'vn30_prediction.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'your_database_name',
-        'HOST': 'localhost',
-        'PORT': 27017,
-    }
-}
+
 
 
 
