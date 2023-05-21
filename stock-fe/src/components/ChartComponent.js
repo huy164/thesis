@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const ChartComponent = props => {
 	const {
-		data,
+		data=initialData,
 		className,
 		colors: {
 			backgroundColor = 'white',
@@ -12,7 +12,7 @@ const ChartComponent = props => {
 			areaTopColor = '#2962FF',
 			areaBottomColor = 'rgba(41, 98, 255, 0.28)',
 		} = {},
-		predictData=samplePredictedData,
+		predictdata=samplePredictedData,
 	} = props;
 	const [currentData, setCurrentData] = useState(null)
 	const [isCurrentDataVisible, setCurrentDataVisible] = useState(true)
@@ -30,7 +30,7 @@ const ChartComponent = props => {
 	}
 	useEffect(
 		() => {
-			const allData = [...data, ...predictData];
+			const allData = [...data, ...predictdata];
 
 			const handleResize = () => {
 				chart.applyOptions({ width: chartContainerRef.current.clientWidth });
@@ -110,14 +110,14 @@ const ChartComponent = props => {
 				{ lineColor: 'orange', topColor: areaTopColor, bottomColor: areaBottomColor, lineWidth: 2, visible: chartType==='candle'});
 			
 			predictCandleSeries.setData(
-				predictData.map(element => {
+				predictdata.map(element => {
 					return {
 						...element
 					}
 				})
 			)
 			predictCandleSeries.setMarkers(
-				predictData.map(element => {
+				predictdata.map(element => {
 					return {
 						'time': element['time'],
 						position: 'aboveBar',
@@ -141,7 +141,7 @@ const ChartComponent = props => {
 					bottom: 0,
 				},
 			});
-			predictVolumeSeries.setData(predictData.map(
+			predictVolumeSeries.setData(predictdata.map(
 				element => {
 					return {
 						'time': element['time'], 
